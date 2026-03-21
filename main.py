@@ -1,97 +1,86 @@
 from abc import ABC, abstractmethod
 
+class Beverage(ABC):
+    def prepare_recipe(self):
+        self.boil_water()
+        self.brew()
+        self.pour_in_cup()
+        if self.customer_wants_condiments():
+            self.add_condiments()
 
+    def boil_water(self):
+        print("Кипятим воду...")
 
-class Transport(ABC):
-    "Абстрактный продукт"
-    
+    def pour_in_cup(self):
+        print("Наливаем в чашку...")
+
     @abstractmethod
-    def load_cargo(self):
+    def brew(self):
         pass
 
     @abstractmethod
-    def calculate_cost(self):
+    def add_condiments(self):
         pass
 
-    @abstractmethod
-    def track_location(self):
-        pass
+    def customer_wants_condiments(self):
+        return True
 
-class Truck(Transport):
-    def load_cargo(self):
-        return "Груз загружен в грузовик."
-    
-    def calculate_cost(self):
-        return "Стоимость рассчитана для наземной перевозки."
-    
-    def track_location(self):
-        return "Грузовик отслеживается via GPS."
-    
-    def check_road_condition(self):
-        return "Состояние дороги проверено: ОК."
+class Espresso(Beverage):
+    def brew(self):
+        print("Завариваем эспрессо под давлением...")
 
-class Ship(Transport):
-    def load_cargo(self):
-        return "Груз загружен на корабль."
-    
-    def calculate_cost(self):
-        return "Стоимость рассчитана для морской перевозки."
-    
-    def track_location(self):
-        return "Корабль отслеживается via AIS."
-    
-    def check_weather(self):
-        return "Погодные условия проверены: Штормов нет."
+    def add_condiments(self):
+        print("Добавляем сахар...")
 
-class Airplane(Transport):
-    def load_cargo(self):
-        return "Груз загружен в самолет."
-    
-    def calculate_cost(self):
-        return "Стоимость рассчитана для авиаперевозки."
-    
-    def track_location(self):
-        return "Самолет отслеживается via Radar."
-    
-    def check_flight_permission(self):
-        return "Разрешение на полет получено."
+class Cappuccino(Beverage):
+    def brew(self):
+        print("Завариваем эспрессо...")
 
+    def add_condiments(self):
+        print("Добавляем взбитое молоко и пенку...")
 
+class HotChocolate(Beverage):
+    def brew(self):
+        print("Растворяем какао-порошок...")
 
-class Logistics(ABC):
-    "Абстрактный создатель"
-    
-    @abstractmethod
-    def create_transport(self) -> Transport:
-        pass
-    
-    def plan_delivery(self):
-        "Бизнес-логика, использующая фабричный метод"
-        transport = self.create_transport()
-        
-        # Общие операции
-        print(transport.load_cargo())
-        print(transport.calculate_cost())
-        print(transport.track_location())
-        
-        # Уникальные операции (полиморфизм через isinstance или доп. методы)
-        if isinstance(transport, Truck):
-            print(transport.check_road_condition())
-        elif isinstance(transport, Ship):
-            print(transport.check_weather())
-        elif isinstance(transport, Airplane):
-            print(transport.check_flight_permission())
-            
-        return transport
+    def add_condiments(self):
+        print("Добавляем зефирки и сливки...")
 
-class RoadLogistics(Logistics):
-    def create_transport(self) -> Transport:
-        return Truck()
+class Americano(Beverage):
+    def brew(self):
+        print("Завариваем эспрессо и добавляем воду...")
 
-class SeaLogistics(Logistics):
-    def create_transport(self) -> Transport:
-        return Ship()
+    def add_condiments(self):
+        print("Добавляем сахар...")
 
-class AirLogistics(Logistics):
-    def create_transport(self) -> Transport:
-        return Airplane()
+class LatteMacchiato(Beverage):
+    def brew(self):
+        print("Наливаем молоко, затем вливаем эспрессо...")
+
+    def add_condiments(self):
+        print("Добавляем молочную пенку...")
+
+class DoubleShotEspresso(Espresso):
+    def brew(self):
+        print("Завариваем первую порцию...")
+        print("Завариваем вторую порцию...")
+
+class HealthyCappuccino(Cappuccino):
+    def customer_wants_condiments(self):
+        return False
+
+if __name__ == "__main__":
+    drink = Cappuccino()
+    drink.prepare_recipe()
+
+    drink = HotChocolate()
+    drink.prepare_recipe()
+
+    drink = HealthyCappuccino()
+    drink.prepare_recipe()
+
+    drink = LatteMacchiato()
+    drink.prepare_recipe()
+
+    drink = DoubleShotEspresso()
+    drink.prepare_recipe()
